@@ -54,12 +54,13 @@ async function login(request) {
         expiresIn: "8h",
       }
     );
-
+    user.password = undefined;
     return new Response(
       200,
       "Berhasil masuk ke akun Kliksales",
       {
         access_token,
+        user_details: user,
       },
       null,
       false
