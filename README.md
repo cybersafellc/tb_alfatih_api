@@ -37,3 +37,101 @@ HOST API : https://api.rusnandapurnama.com
   "error": false
 }
 ```
+
+## Cek Akses Token dan Get Profile
+
+### staff
+
+- GET /private/staff/verify
+
+- Request Headers :
+
+```json
+{
+  "Authorization": " Bearer {:access token}"
+}
+```
+
+- Response Body :
+
+```json
+{
+  "status": 200,
+  "message": "akses token valid",
+  "data": {
+    "id": "d927a71d-04b2-4cce-b0ef-679ef0b1e55b",
+    "username": "staff",
+    "role": "staff",
+    "status": true,
+    "img_profile": "/img/profile/default-profile.png",
+    "created_at": "2025-10-08T09:54:07.000Z",
+    "updated_at": "2025-10-08T09:54:07.000Z"
+  },
+  "refrence": null,
+  "error": false
+}
+```
+
+### supervisor
+
+- GET /private/supervisor/verify
+
+- Request Headers :
+
+```json
+{
+  "Authorization": " Bearer {:access token}"
+}
+```
+
+- Response Body :
+
+```json
+{
+  "status": 200,
+  "message": "akses token valid",
+  "data": {
+    "id": "d927a71d-04b2-4cce-b0ef-679ef0b1e55b",
+    "username": "staff",
+    "role": "staff",
+    "status": true,
+    "img_profile": "/img/profile/default-profile.png",
+    "created_at": "2025-10-08T09:54:07.000Z",
+    "updated_at": "2025-10-08T09:54:07.000Z"
+  },
+  "refrence": null,
+  "error": false
+}
+```
+
+### Admin
+
+- GET /private/admin/verify
+
+- Request Headers :
+
+```json
+{
+  "Authorization": " Bearer {:access token}"
+}
+```
+
+- Response Body :
+
+```json
+{
+  "status": 200,
+  "message": "akses token valid",
+  "data": {
+    "id": "d927a71d-04b2-4cce-b0ef-679ef0b1e55b",
+    "username": "staff",
+    "role": "staff",
+    "status": true,
+    "img_profile": "/img/profile/default-profile.png",
+    "created_at": "2025-10-08T09:54:07.000Z",
+    "updated_at": "2025-10-08T09:54:07.000Z"
+  },
+  "refrence": null,
+  "error": false
+}
+```
