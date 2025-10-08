@@ -20,8 +20,8 @@ web.use(cookieParser());
 web.use(bodyParser.json());
 
 // route
-web.use(privateRouter);
-web.use(publicRouter);
+web.use("/private", privateRouter);
+web.use("/public", publicRouter);
 // err handler
 web.use(errorMiddleware.RouteNotFound);
 web.use(errorMiddleware.ErrorHandler);
