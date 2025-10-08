@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model pengguna {
+  id          String          @id @default(uuid())
+  username    String?         @unique
+  password    String?
+  role        Role
+  status      Boolean?
+  img_profile String?
+  created_at  DateTime        @default(now())
+  updated_at  DateTime        @updatedAt
+
+  // Relations
+  sales_order       sales_order[]
+  draft_penawaran   draft_penawaran[]
+}
+
+model tahap {
+  id          String      @id @default(uuid())
+  numbers     Int?
+  title       String?
+  details     String?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  // Relations
+  kategori    kategori[]
+  faq         faq[]
+}
+
+model kategori {
+  id          String      @id @default(uuid())
+  tahap_id    String?
+  name        String?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  // Relations
+  tahap       tahap?      @relation(fields: [tahap_id], references: [id], onDelete: Cascade)
+  products    products[]
+}
+
+model faq {
+  id          String      @id @default(uuid())
+  tahap_id    String?
+  title       String?
+  details     String?
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  // Relations
+  tahap       tahap?      @relation(fields: [tahap_id], references: [id], onDelete: Cascade)
+}
+
+model products {
+  id                  String                     @id @default(uuid())
+  type                ProductType
+  name                String?
+  jenis               String?
+  prioritas_upselling Boolean?
+  harga_jual          Int?
+  kondisi_peruntukan  String?
+  spesifikasi         String?
+  kategori_id         String?
+  ditolak             Boolean?                   @default(false)
+  diproses            Boolean?                   @default(false)
+  diterima            Boolean?                   @default(false)
+  created_at          DateTime                   @default(now())
+  updated_at          DateTime                   @updatedAt
+
+  // Relations
+  kategori            kategori?                  @relation(fields: [kategori_id], references: [id], onDelete: SetNull)
+  img_products        img_products[]
+  cross_selling_inti  cross_selling_connection[] @relation("ProductInti")
+  cross_selling_cross cross_selling_connection[] @relation("ProductCross")
+  details_sales_order details_sales_order[]
+  draft_penawaran     draft_penawaran[]
+}
+
+model img_products {
+  id          String     @id @default(uuid())
+  product_id  String?
+  path        String?
+  created_at  DateTime   @default(now())
+  updated_at  DateTime   @updatedAt
+
+  // Relations
+  product     products?  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+}
+
+model cross_selling_connection {
+  id                       String    @id @default(uuid())
+  product_inti_id           String?
+  product_cross_selling_id  String?
+  created_at                DateTime @default(now())
+  updated_at                DateTime @updatedAt
+
+  // Relations
+  product_inti             products? @relation("ProductInti", fields: [product_inti_id], references: [id], onDelete: Cascade)
+  product_cross_selling    products? @relation("ProductCross", fields: [product_cross_selling_id], references: [id], onDelete: Cascade)
+}
+
+model sales_order {
+  id               String               @id @default(uuid())
+  pengguna_id      String?
+  name             String?
+  alamat           String?
+  tanggal_janji_antar DateTime?
+  no_hp            String?
+  proses_hapus     Boolean?             @default(false)
+  disetuji_hapus   Boolean?             @default(false)
+  created_at       DateTime             @default(now())
+  updated_at       DateTime             @updatedAt
+
+  // Relations
+  pengguna         pengguna?            @relation(fields: [pengguna_id], references: [id], onDelete: Cascade)
+  details_sales_order details_sales_order[]
+}
+
+model details_sales_order {
+  id              String        @id @default(uuid())
+  sales_order_id  String?
+  product_id      String?
+  jumlah          Int?
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
+
+  // Relations
+  sales_order     sales_order?  @relation(fields: [sales_order_id], references: [id], onDelete: Cascade)
+  product         products?     @relation(fields: [product_id], references: [id], onDelete: SetNull)
+}
+
+model draft_penawaran {
+  id                String     @id @default(uuid())
+  pengguna_id       String?
+  product_id        String?
+  salam_judul       String?
+  salam_chat        String?
+  tawar_produk_judul String?
+  tawar_produk_chat String?
+  cocok_untuk_judul String?
+  cocok_untuk_chat  String?
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
+
+  // Relations
+  pengguna          pengguna?  @relation(fields: [pengguna_id], references: [id], onDelete: Cascade)
+  product           products?  @relation(fields: [product_id], references: [id], onDelete: SetNull)
+}
+
+enum ProductType {
+  inti
+  cross_selling
+}
+
+enum Role {
+  admin
+  supervisor
+  staff
+}
