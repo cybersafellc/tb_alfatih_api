@@ -10,8 +10,8 @@ HOST API : https://api.rusnandapurnama.com
 
 ```json
 {
-    "username": "example",
-    "password": "example
+  "username": "example",
+  "password": "example"
 }
 ```
 
