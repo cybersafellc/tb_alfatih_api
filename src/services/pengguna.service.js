@@ -6,8 +6,8 @@ import { validation } from "../validations/validation.js";
 import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 
-async function create(request) {
-  const result = await validation(penggunaValidation.create, request);
+async function AdminCreate(request) {
+  const result = await validation(penggunaValidation.AdminCreate, request);
   const count = await database.pengguna.count({
     where: {
       username: result.username,
@@ -89,4 +89,146 @@ async function verify(request) {
   return new Response(200, "akses token valid", user, null, false);
 }
 
-export default { create, login, verify };
+async function adminUpdate(request) {
+  const result = await validation(penggunaValidation.adminUpdate, request);
+  const count = await database.pengguna.count({
+    where: {
+      id: result.id,
+    },
+  });
+  if (!count) throw new ResponseError(400, "akun ini tidak ditemukan");
+
+  if (result.username) {
+    const userNameCheck = await database.pengguna.count({
+      where: {
+        username: result.username,
+        NOT: {
+          id: result.id,
+        },
+      },
+    });
+    if (userNameCheck)
+      throw new ResponseError(
+        400,
+        "username tersebut sudah dimiliki user yang lain"
+      );
+  }
+  if (result.password) {
+    result.password = await bcrypt.hash(result.password, 10);
+  }
+  const responseUpdate = await database.pengguna.update({
+    data: result,
+    where: {
+      id: result.id,
+    },
+  });
+  return new Response(
+    200,
+    "berhasil mengupdate akun user",
+    responseUpdate,
+    null,
+    false
+  );
+}
+
+async function get(request) {
+  const result = await validation(penggunaValidation.get, request);
+  let response;
+  let custom_data = {};
+  if (result.id) {
+    response = await database.pengguna.findUnique({
+      where: {
+        id: result.id,
+      },
+    });
+    if (!response) throw new ResponseError(400, "user tidak ditemukan");
+    return new Response(200, "list user", response, null, false);
+  } else {
+    const total_user = await database.pengguna.count();
+    response = await database.pengguna.findMany({
+      orderBy: {
+        updated_at: result?.desc ? "desc" : "asc",
+      },
+      where: {
+        username: {
+          contains: result.search || "",
+        },
+      },
+      skip: ((result?.page || 1) - 1) * (result?.items_per_page || 10),
+      take: result?.items_per_page || 10,
+    });
+
+    custom_data.items_per_page = result.items_per_page || 10;
+    custom_data.page = result.page || 1;
+    custom_data.max_page = Math.ceil(
+      total_user / (result.items_per_page || 10)
+    );
+    custom_data.search = result.search;
+    custom_data.total_data = total_user;
+    return new Response(
+      200,
+      "list user",
+      { data: response, pagination: custom_data },
+      null,
+      false
+    );
+  }
+}
+
+async function getProfile(request) {
+  const result = await validation(penggunaValidation.getProfile, request);
+  const profile = await database.pengguna.findUnique({
+    where: {
+      id: result.user_id,
+    },
+    select: {
+      id: true,
+      username: true,
+      role: true,
+      status: true,
+      img_profile: true,
+      created_at: true,
+      updated_at: true,
+    },
+  });
+  if (!profile) throw new ResponseError(400, "akun anda dikunci");
+  return new Response(200, "profile", profile, null, false);
+}
+
+async function updateImageProfile(request) {
+  const result = await validation(
+    penggunaValidation.updateImageProfile,
+    request
+  );
+  const count = await database.pengguna.count({
+    where: {
+      id: result.user_id,
+    },
+  });
+  if (!count) throw new ResponseError(400, "akun anda dikucni");
+  const updateResponse = await database.pengguna.update({
+    data: {
+      img_profile: "/img/profile/"+result.img_profile,
+    },
+    where: {
+      id: result.user_id,
+    },
+  });
+  return new Response(
+    200,
+    "berhasil mengupdate foto profile",
+    updateResponse,
+    null,
+    false
+  );
+}
+
+export default {
+  AdminCreate,
+  login,
+  verify,
+  adminUpdate,
+  get,
+  getProfile,
+  updateImageProfile,
+};
