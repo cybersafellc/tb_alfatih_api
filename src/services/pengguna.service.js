@@ -208,7 +208,7 @@ async function updateImageProfile(request) {
   if (!count) throw new ResponseError(400, "akun anda dikucni");
   const updateResponse = await database.pengguna.update({
     data: {
-      img_profile: "/img/profile/"+result.img_profile,
+      img_profile: "/img/profile/" + result.img_profile,
     },
     where: {
       id: result.user_id,
