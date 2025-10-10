@@ -16,10 +16,7 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     // Ganti nama file biar unik
-    const uniqueSuffix =
-      Date.now() +
-      "-" +
-      crypto.randomUUID();
+    const uniqueSuffix = Date.now() + "-" + crypto.randomUUID();
     const ext = path.extname(file.originalname);
     cb(null, file.fieldname + "-" + uniqueSuffix + ext);
   },
