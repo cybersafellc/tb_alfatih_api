@@ -144,7 +144,13 @@ async function get(request) {
     if (!response) throw new ResponseError(400, "user tidak ditemukan");
     return new Response(200, "list user", response, null, false);
   } else {
-    const total_user = await database.pengguna.count();
+    const total_user = await database.pengguna.count({
+      where: {
+        username: {
+          contains: result.search || "",
+        },
+      },
+    });
     response = await database.pengguna.findMany({
       orderBy: {
         updated_at: result?.desc ? "desc" : "asc",

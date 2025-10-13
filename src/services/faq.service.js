@@ -97,7 +97,30 @@ async function get(request) {
     if (!response) throw new ResponseError(400, "faq tidak ditemukan");
     return new Response(200, "list faq", response, null, false);
   } else {
-    const total_user = await database.faq.count();
+    const total_user = await database.faq.count({
+      where: {
+        tahap_id: result?.tahap_id || undefined,
+        OR: [
+          {
+            title: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            details: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            tahap: {
+              title: {
+                contains: result?.search || "",
+              },
+            },
+          },
+        ],
+      },
+    });
     response = await database.faq.findMany({
       orderBy: {
         updated_at: result?.desc ? "desc" : "asc",

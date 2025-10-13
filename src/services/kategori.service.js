@@ -46,7 +46,32 @@ async function get(request) {
     if (!response) throw new ResponseError(400, "kategori tidak ditemukan");
     return new Response(200, "list kategori", response, null, false);
   } else {
-    const total_user = await database.kategori.count();
+    const total_user = await database.kategori.count({
+      where: {
+        tahap_id: result?.tahap_id || undefined,
+        OR: [
+          {
+            name: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            tahap: {
+              details: {
+                contains: result?.search || "",
+              },
+            },
+          },
+          {
+            tahap: {
+              title: {
+                contains: result?.search || "",
+              },
+            },
+          },
+        ],
+      },
+    });
     response = await database.kategori.findMany({
       orderBy: {
         updated_at: result?.desc ? "desc" : "asc",
@@ -91,7 +116,7 @@ async function get(request) {
     custom_data.total_data = total_user;
     return new Response(
       200,
-      "list tahap",
+      "list kategori",
       { data: response, pagination: custom_data },
       null,
       false

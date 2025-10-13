@@ -40,7 +40,22 @@ async function get(request) {
     if (!response) throw new ResponseError(400, "tahap tidak ditemukan");
     return new Response(200, "list tahap", response, null, false);
   } else {
-    const total_user = await database.tahap.count();
+    const total_user = await database.tahap.count({
+      where: {
+        OR: [
+          {
+            title: {
+              contains: result.search || "",
+            },
+          },
+          {
+            details: {
+              contains: result.search || "",
+            },
+          },
+        ],
+      },
+    });
     response = await database.tahap.findMany({
       orderBy: {
         numbers: result?.desc ? "desc" : "asc",
