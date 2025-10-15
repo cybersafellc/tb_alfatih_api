@@ -65,7 +65,21 @@ router.post(
 router.get("/product", authMiddleware.allRole, productController.get);
 
 // draft penawaran
-router.post("/admin/draft-penawaran", authMiddleware.adminRole, draft_penawaranController.create)
+router.post(
+  "/admin/draft-penawaran",
+  authMiddleware.adminRole,
+  draft_penawaranController.create
+);
+router.put(
+  "/admin/draft-penawaran",
+  authMiddleware.adminRole,
+  draft_penawaranController.update
+);
+router.delete(
+  "/admin/draft-penawaran",
+  authMiddleware.adminRole,
+  draft_penawaranController.deletes
+);
 
 // access token verify
 router.get(

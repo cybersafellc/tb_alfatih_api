@@ -6,4 +6,15 @@ const create = Joi.object({
   chat: Joi.string().required(),
 }).required();
 
-export default { create };
+const update = Joi.object({
+  id: Joi.string().required(),
+  product_id: Joi.string().optional(),
+  judul: Joi.string().optional(),
+  chat: Joi.string().optional(),
+}).required();
+
+const deletes = Joi.object({
+  id: Joi.string().required(),
+}).required();
+
+export default { create, update, deletes };
