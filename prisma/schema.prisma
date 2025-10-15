@@ -142,7 +142,6 @@ model draft_penawaran {
   product_id        String?
   judul       String?
   chat        String?
-  cocok_untuk_chat  String?
   created_at        DateTime   @default(now())
   updated_at        DateTime   @updatedAt
   // Relations
