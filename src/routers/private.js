@@ -7,6 +7,7 @@ import kategoriController from "../controllers/kategori.controller.js";
 import faqController from "../controllers/faq.controller.js";
 import { uploadProductImg } from "../middlewares/multerProduct.middleware.js";
 import productController from "../controllers/product.controller.js";
+import draft_penawaranController from "../controllers/draft_penawaran.controller.js";
 
 const router = express.Router();
 // tahap
@@ -62,6 +63,9 @@ router.post(
   productController.create
 );
 router.get("/product", authMiddleware.allRole, productController.get);
+
+// draft penawaran
+router.post("/admin/draft-penawaran", authMiddleware.adminRole, draft_penawaranController.create)
 
 // access token verify
 router.get(
