@@ -202,17 +202,24 @@ async function get(request) {
         kategori: {
           tahap_id: result?.tahap_id || undefined,
         },
+        kategori_id: result?.kategori_id || undefined,
         OR: [
           {
             name: {
               contains: result.search || "",
             },
+          },
+          {
             jenis: {
               contains: result.search || "",
             },
+          },
+          {
             kondisi_peruntukan: {
               contains: result.search || "",
             },
+          },
+          {
             spesifikasi: {
               contains: result.search || "",
             },
@@ -229,17 +236,24 @@ async function get(request) {
         kategori: {
           tahap_id: result?.tahap_id || undefined,
         },
+        kategori_id: result?.kategori_id || undefined,
         OR: [
           {
             name: {
               contains: result.search || "",
             },
+          },
+          {
             jenis: {
               contains: result.search || "",
             },
+          },
+          {
             kondisi_peruntukan: {
               contains: result.search || "",
             },
+          },
+          {
             spesifikasi: {
               contains: result.search || "",
             },

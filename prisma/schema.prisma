@@ -19,7 +19,6 @@ model pengguna {
 
   // Relations
   sales_order       sales_order[]
-  draft_penawaran   draft_penawaran[]
 }
 
 model tahap {
@@ -109,6 +108,7 @@ model cross_selling_connection {
 
 model sales_order {
   id               String               @id @default(uuid())
+  so_numbers      String? @unique
   pengguna_id      String?
   name             String?
   alamat           String?
@@ -139,20 +139,24 @@ model details_sales_order {
 
 model draft_penawaran {
   id                String     @id @default(uuid())
-  pengguna_id       String?
   product_id        String?
-  salam_judul       String?
-  salam_chat        String?
-  tawar_produk_judul String?
-  tawar_produk_chat String?
-  cocok_untuk_judul String?
+  judul       String?
+  chat        String?
   cocok_untuk_chat  String?
   created_at        DateTime   @default(now())
   updated_at        DateTime   @updatedAt
-
   // Relations
-  pengguna          pengguna?  @relation(fields: [pengguna_id], references: [id], onDelete: Cascade)
   product           products?  @relation(fields: [product_id], references: [id], onDelete: SetNull)
+}
+
+model reviews {
+  id String @id @default(uuid())
+  ip_address String
+  star Int
+  nama String
+  comment String
+  created_at        DateTime   @default(now())
+  updated_at        DateTime   @updatedAt
 }
 
 enum ProductType {

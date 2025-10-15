@@ -21,6 +21,7 @@ const get = Joi.object({
   id: Joi.string().optional(),
   type: Joi.string().optional(),
   tahap_id: Joi.string().optional(),
+  kategori_id: Joi.string().optional(),
   page: Joi.number().optional(),
   items_per_page: Joi.number().optional(),
   search: Joi.string().optional(),
