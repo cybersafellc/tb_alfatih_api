@@ -38,4 +38,13 @@ async function deleteProductImage(req, res, next) {
   }
 }
 
-export default { uploadProductImage, create, get, deleteProductImage };
+async function update(req, res, next) {
+  try {
+    const response = await productService.update(req.body);
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default { uploadProductImage, create, get, deleteProductImage, update };

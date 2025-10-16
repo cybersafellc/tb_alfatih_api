@@ -67,6 +67,11 @@ router.post(
   authMiddleware.adminAndSupervisor,
   productController.create
 );
+router.put(
+  "/as/product",
+  authMiddleware.adminAndSupervisor,
+  productController.update
+);
 router.get("/product", authMiddleware.allRole, productController.get);
 
 // draft penawaran

@@ -21,6 +21,19 @@ const create = Joi.object({
   cross_selling_id: Joi.array().optional(),
 }).required();
 
+const update = Joi.object({
+  id: Joi.string().required(),
+  kategori_id: Joi.string().optional(),
+  name: Joi.string().optional(),
+  jenis: Joi.string().optional(),
+  prioritas_upselling: Joi.boolean().optional(),
+  harga_jual: Joi.number().optional(),
+  kondisi_peruntukan: Joi.string().optional(),
+  spesifikasi: Joi.string().optional(),
+  img_product: Joi.array().optional(),
+  cross_selling_id: Joi.array().optional(),
+}).required();
+
 const get = Joi.object({
   id: Joi.string().optional(),
   type: Joi.string().optional(),
@@ -32,4 +45,4 @@ const get = Joi.object({
   desc: Joi.boolean().optional(),
 }).required();
 
-export default { uploadProductImage, create, get, deleteProductImage };
+export default { uploadProductImage, create, get, deleteProductImage, update };

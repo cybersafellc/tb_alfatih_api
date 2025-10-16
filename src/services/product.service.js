@@ -169,6 +169,106 @@ async function create(request) {
   }
 }
 
+async function update(request) {
+  const result = await validation(productValidation.update, request);
+  const product = await database.products.findUnique({
+    where: {
+      id: result.id,
+    },
+  });
+  if (!product) throw new ResponseError(400, "id product tidak valid");
+  if (result?.kategori_id) {
+    const count = await database.kategori.count({
+      where: {
+        id: result.kategori_id,
+      },
+    });
+    if (!count) throw new ResponseError(400, "kategori id tidak valid");
+  }
+
+  //  validasi product already exist
+
+  // validasi cross_selling
+  if (result?.cross_selling_id?.length > 0 && product.type === "inti") {
+    if (result.cross_selling_id.length !== 3)
+      throw new ResponseError(400, "wajib mengirim 3 cross selling");
+
+    for (const id_cross_selling of result.cross_selling_id) {
+      const count = await database.products.count({
+        where: {
+          id: id_cross_selling,
+          type: "cross_selling",
+        },
+      });
+      if (!count)
+        throw new ResponseError(
+          400,
+          "cross_selling_id " + id_cross_selling + " tidak valid"
+        );
+    }
+
+    await database.cross_selling_connection.deleteMany({
+      where: {
+        id: result.id,
+      },
+    });
+
+    for (const id_cross_selling of result.cross_selling_id) {
+      await database.cross_selling_connection.create({
+        data: {
+          id: crypto.randomUUID(),
+          product_inti_id: product.id,
+          product_cross_selling_id: id_cross_selling,
+        },
+      });
+    }
+  }
+
+  // validation image
+  if (result?.img_product?.length > 0) {
+    for (const pathImg of result.img_product) {
+      const count = await database.img_products.count({
+        where: {
+          path: pathImg,
+          product_id: product.id,
+        },
+      });
+      if (!count) {
+        await database.img_products.create({
+          data: {
+            id: crypto.randomUUID(),
+            product_id: product.id,
+            path: pathImg,
+          },
+        });
+      }
+    }
+  }
+
+  const responseUpdate = await database.products.update({
+    where: {
+      id: product.id,
+    },
+    data: {
+      kategori_id: result?.kategori_id,
+      name: result?.name,
+      jenis: result?.jenis,
+      prioritas_upselling: result?.prioritas_upselling,
+      harga_jual: result?.harga_jual,
+      kondisi_peruntukan: result?.kondisi_peruntukan,
+      spesifikasi: result?.spesifikasi,
+    },
+  });
+
+  return new Response(
+    200,
+    "berhasil mengupdate product",
+    responseUpdate,
+    null,
+    false
+  );
+}
+
 async function get(request) {
   const result = await validation(productValidation.get, request);
   let response;
@@ -329,4 +429,4 @@ async function deleteProductImage(request) {
   );
 }
 
-export default { uploadProductImage, create, get, deleteProductImage };
+export default { uploadProductImage, create, get, deleteProductImage, update };
