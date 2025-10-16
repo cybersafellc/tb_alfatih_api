@@ -4,6 +4,10 @@ const uploadProductImage = Joi.object({
   img_product: Joi.string().required(),
 }).required();
 
+const deleteProductImage = Joi.object({
+  id: Joi.string().required(),
+}).required();
+
 const create = Joi.object({
   kategori_id: Joi.string().required(),
   type: Joi.string().valid("inti", "cross_selling").required(),
@@ -28,4 +32,4 @@ const get = Joi.object({
   desc: Joi.boolean().optional(),
 }).required();
 
-export default { uploadProductImage, create, get };
+export default { uploadProductImage, create, get, deleteProductImage };

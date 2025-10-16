@@ -29,4 +29,13 @@ async function get(req, res, next) {
   }
 }
 
-export default { uploadProductImage, create, get };
+async function deleteProductImage(req, res, next) {
+  try {
+    const response = await productService.deleteProductImage(req.body);
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default { uploadProductImage, create, get, deleteProductImage };

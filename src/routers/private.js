@@ -57,6 +57,11 @@ router.post(
   uploadProductImg,
   productController.uploadProductImage
 );
+router.delete(
+  "/as/product/img",
+  authMiddleware.adminAndSupervisor,
+  productController.deleteProductImage
+);
 router.post(
   "/as/product",
   authMiddleware.adminAndSupervisor,

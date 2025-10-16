@@ -304,4 +304,29 @@ async function get(request) {
   }
 }
 
-export default { uploadProductImage, create, get };
+async function deleteProductImage(request) {
+  const result = await validation(
+    productValidation.deleteProductImage,
+    request
+  );
+  const countImg = await database.img_products.count({
+    where: {
+      id: result.id,
+    },
+  });
+  if (!countImg) throw new ResponseError(400, "id gambar tidak valid");
+  const responseDelete = await database.img_products.delete({
+    where: {
+      id: result.id,
+    },
+  });
+  return new Response(
+    200,
+    "berhasil menghapus gambar",
+    responseDelete,
+    null,
+    false
+  );
+}
+
+export default { uploadProductImage, create, get, deleteProductImage };
