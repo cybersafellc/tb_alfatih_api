@@ -4,7 +4,7 @@ import { Response } from "../utils/utils.js";
 
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 120, // berapa request /menit bang
+  max: 560, // berapa request /menit bang
   standardHeaders: true,
   legacyHeaders: false,
   handler: async (req, res) => {
