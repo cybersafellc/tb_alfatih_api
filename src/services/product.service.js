@@ -209,7 +209,7 @@ async function update(request) {
 
     await database.cross_selling_connection.deleteMany({
       where: {
-        id: result.id,
+        product_inti_id: result.id,
       },
     });
 
