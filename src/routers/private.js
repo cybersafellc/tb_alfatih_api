@@ -8,6 +8,7 @@ import faqController from "../controllers/faq.controller.js";
 import { uploadProductImg } from "../middlewares/multerProduct.middleware.js";
 import productController from "../controllers/product.controller.js";
 import draft_penawaranController from "../controllers/draft_penawaran.controller.js";
+import sales_orderController from "../controllers/sales_order.controller.js";
 
 const router = express.Router();
 // tahap
@@ -89,6 +90,13 @@ router.delete(
   "/admin/draft-penawaran",
   authMiddleware.adminRole,
   draft_penawaranController.deletes
+);
+
+// sales order
+router.post(
+  "/sa/sales-order",
+  authMiddleware.adminAndStaff,
+  sales_orderController.create
 );
 
 // access token verify
