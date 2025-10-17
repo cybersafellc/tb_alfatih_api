@@ -9,7 +9,9 @@ async function create(request) {
   // validation product
   if (result.product.length <= 0)
     throw new ResponseError(400, "product is required");
-  const isDuplicate = new Set(result.product).size !== result.product.length;
+
+  const ids = result.product.map((p) => p.product_id);
+  const isDuplicate = new Set(ids).size !== result.product.length;
   if (isDuplicate) throw new ResponseError(400, "product duplicate");
 
   for (const product of result.product) {
