@@ -33,6 +33,21 @@ router.put(
   uploadProfile,
   penggunaController.updateImageProfile
 );
+router.get(
+  "/supervisor/users",
+  authMiddleware.supervisorRole,
+  penggunaController.getBySupervisor
+);
+router.post(
+  "/supervisor/users",
+  authMiddleware.supervisorRole,
+  penggunaController.supervisorCreate
+);
+router.put(
+  "/supervisor/users",
+  authMiddleware.supervisorRole,
+  penggunaController.supervisorEdit
+);
 // kategori
 router.post(
   "/admin/kategori",
@@ -74,6 +89,12 @@ router.put(
   productController.update
 );
 router.get("/product", authMiddleware.allRole, productController.get);
+
+router.put(
+  "/supervisor/product/status",
+  authMiddleware.supervisorRole,
+  productController.statusProduct
+);
 
 // draft penawaran
 router.post(
