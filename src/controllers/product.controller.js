@@ -47,4 +47,20 @@ async function update(req, res, next) {
   }
 }
 
-export default { uploadProductImage, create, get, deleteProductImage, update };
+async function statusProduct(req, res, next) {
+  try {
+    const response = await productService.statusProduct(req.body);
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default {
+  uploadProductImage,
+  create,
+  get,
+  deleteProductImage,
+  update,
+  statusProduct,
+};

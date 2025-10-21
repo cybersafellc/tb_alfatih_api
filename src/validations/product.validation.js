@@ -45,4 +45,16 @@ const get = Joi.object({
   desc: Joi.boolean().optional(),
 }).required();
 
-export default { uploadProductImage, create, get, deleteProductImage, update };
+const statusProduct = Joi.object({
+  id: Joi.string().required(),
+  status: Joi.boolean().required(),
+}).required();
+
+export default {
+  uploadProductImage,
+  create,
+  get,
+  deleteProductImage,
+  update,
+  statusProduct,
+};

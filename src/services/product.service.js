@@ -429,4 +429,38 @@ async function deleteProductImage(request) {
   );
 }
 
-export default { uploadProductImage, create, get, deleteProductImage, update };
+async function statusProduct(request) {
+  const result = await validation(productValidation.statusProduct, request);
+  const count = await database.products.count({
+    where: {
+      id: result.id,
+    },
+  });
+  if (!count) throw new ResponseError(400, "product id tidak valid");
+  const responseUpdate = await database.products.update({
+    data: {
+      diproses: false,
+      diterima: result.status ? true : false,
+      ditolak: result.status ? false : true,
+    },
+    where: {
+      id: result.id,
+    },
+  });
+  return new Response(
+    200,
+    "berhasil" + (result.status ? " mensetujui " : " menolak ") + "product",
+    responseUpdate,
+    null,
+    false
+  );
+}
+
+export default {
+  uploadProductImage,
+  create,
+  get,
+  deleteProductImage,
+  update,
+  statusProduct,
+};
