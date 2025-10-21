@@ -16,4 +16,18 @@ const create = Joi.object({
     .required(),
 }).required();
 
-export default { create };
+const getSalesOrderByProfile = Joi.object({
+  id: Joi.string().optional(),
+  pengguna_id: Joi.string().required(),
+  page: Joi.number().optional(),
+  items_per_page: Joi.number().optional(),
+  search: Joi.string().optional(),
+  desc: Joi.boolean().optional(),
+});
+
+const deletes = Joi.object({
+  id: Joi.string().required(),
+  pengguna_id: Joi.string().required(),
+});
+
+export default { create, getSalesOrderByProfile, deletes };

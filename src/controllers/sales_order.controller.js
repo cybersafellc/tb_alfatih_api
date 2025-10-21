@@ -10,4 +10,28 @@ async function create(req, res, next) {
   }
 }
 
-export default { create };
+async function getSalesOrderByProfile(req, res, next) {
+  try {
+    const response = await sales_orderService.getSalesOrderByProfile({
+      pengguna_id: req.user_id,
+      ...req.query,
+    });
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function deletes(req, res, next) {
+  try {
+    const response = await sales_orderService.deletes({
+      pengguna_id: req.user_id,
+      ...req.body,
+    });
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default { create, getSalesOrderByProfile, deletes };

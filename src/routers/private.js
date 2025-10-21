@@ -98,6 +98,16 @@ router.post(
   authMiddleware.adminAndStaff,
   sales_orderController.create
 );
+router.get(
+  "/sa/sales-order",
+  authMiddleware.adminAndStaff,
+  sales_orderController.getSalesOrderByProfile
+);
+router.delete(
+  "/sa/sales-order",
+  authMiddleware.adminAndStaff,
+  sales_orderController.deletes
+);
 
 // access token verify
 router.get(
