@@ -41,6 +41,27 @@ const updateImageProfile = Joi.object({
   img_profile: Joi.string().required(),
 }).required();
 
+const getBySupervisor = Joi.object({
+  id: Joi.string().optional(),
+  page: Joi.number().optional(),
+  items_per_page: Joi.number().optional(),
+  search: Joi.string().optional(),
+  desc: Joi.boolean().optional(),
+}).required();
+
+const supervisorCreate = Joi.object({
+  username: Joi.string().required(),
+  password: Joi.string().required(),
+  status: Joi.boolean().required(),
+}).required();
+
+const supervisorEdit = Joi.object({
+  id: Joi.string().required(),
+  username: Joi.string().optional(),
+  password: Joi.string().optional(),
+  status: Joi.boolean().optional(),
+}).required();
+
 export default {
   AdminCreate,
   login,
@@ -49,4 +70,7 @@ export default {
   get,
   getProfile,
   updateImageProfile,
+  getBySupervisor,
+  supervisorCreate,
+  supervisorEdit,
 };

@@ -71,6 +71,33 @@ async function updateImageProfile(req, res, next) {
   }
 }
 
+async function getBySupervisor(req, res, next) {
+  try {
+    const response = await penggunaService.getBySupervisor(req.query);
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function supervisorCreate(req, res, next) {
+  try {
+    const response = await penggunaService.supervisorCreate(req.body);
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function supervisorEdit(req, res, next) {
+  try {
+    const response = await penggunaService.supervisorEdit(req.body);
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
 export default {
   AdminCreate,
   login,
@@ -79,4 +106,7 @@ export default {
   get,
   getProfile,
   updateImageProfile,
+  getBySupervisor,
+  supervisorCreate,
+  supervisorEdit,
 };
