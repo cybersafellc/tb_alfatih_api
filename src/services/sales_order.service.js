@@ -76,7 +76,6 @@ async function getSalesOrderByProfile(request) {
     sales_orderValidation.getSalesOrderByProfile,
     request
   );
-  console.log(result);
   let response;
   let custom_data = {};
   if (result.id) {
@@ -184,6 +183,117 @@ async function getSalesOrderByProfile(request) {
   }
 }
 
+async function getSalesOrderBySupervisor(request) {
+  const result = await validation(
+    sales_orderValidation.getSalesOrderBySupervisor,
+    request
+  );
+  let response;
+  let custom_data = {};
+  if (result.id) {
+    response = await database.sales_order.findUnique({
+      where: {
+        id: result.id,
+      },
+      include: {
+        pengguna: true,
+        details_sales_order: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+    if (!response) throw new ResponseError(400, "sales order tidak ditemukan");
+    return new Response(200, "list sales order", response, null, false);
+  } else {
+    const total_user = await database.sales_order.count({
+      where: {
+        OR: [
+          {
+            so_numbers: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            name: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            alamat: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            no_hp: {
+              contains: result?.search || "",
+            },
+          },
+        ],
+      },
+    });
+    response = await database.sales_order.findMany({
+      orderBy: {
+        updated_at: result?.desc ? "desc" : "asc",
+      },
+      where: {
+        OR: [
+          {
+            so_numbers: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            name: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            alamat: {
+              contains: result?.search || "",
+            },
+          },
+          {
+            no_hp: {
+              contains: result?.search || "",
+            },
+          },
+        ],
+      },
+      include: {
+        pengguna: true,
+        details_sales_order: {
+          include: {
+            product: {
+              include: {
+                img_products: true,
+              },
+            },
+          },
+        },
+      },
+      skip: ((result?.page || 1) - 1) * (result?.items_per_page || 10),
+      take: result?.items_per_page || 10,
+    });
+
+    custom_data.items_per_page = result.items_per_page || 10;
+    custom_data.page = result.page || 1;
+    custom_data.max_page = Math.ceil(
+      total_user / (result.items_per_page || 10)
+    );
+    custom_data.search = result.search;
+    custom_data.total_data = total_user;
+    return new Response(
+      200,
+      "list sales order",
+      { data: response, pagination: custom_data },
+      null,
+      false
+    );
+  }
+}
+
 async function deletes(request) {
   const result = await validation(sales_orderValidation.deletes, request);
   const count = await database.sales_order.count({
@@ -202,4 +312,9 @@ async function deletes(request) {
   );
 }
 
-export default { create, getSalesOrderByProfile, deletes };
+export default {
+  create,
+  getSalesOrderByProfile,
+  deletes,
+  getSalesOrderBySupervisor,
+};

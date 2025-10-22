@@ -34,4 +34,20 @@ async function deletes(req, res, next) {
   }
 }
 
-export default { create, getSalesOrderByProfile, deletes };
+async function getSalesOrderBySupervisor(req, res, next) {
+  try {
+    const response = await sales_orderService.getSalesOrderBySupervisor({
+      ...req.query,
+    });
+    res.status(response.status).json(response).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+export default {
+  create,
+  getSalesOrderByProfile,
+  deletes,
+  getSalesOrderBySupervisor,
+};

@@ -25,9 +25,22 @@ const getSalesOrderByProfile = Joi.object({
   desc: Joi.boolean().optional(),
 });
 
+const getSalesOrderBySupervisor = Joi.object({
+  id: Joi.string().optional(),
+  page: Joi.number().optional(),
+  items_per_page: Joi.number().optional(),
+  search: Joi.string().optional(),
+  desc: Joi.boolean().optional(),
+});
+
 const deletes = Joi.object({
   id: Joi.string().required(),
   pengguna_id: Joi.string().required(),
 });
 
-export default { create, getSalesOrderByProfile, deletes };
+export default {
+  create,
+  getSalesOrderByProfile,
+  deletes,
+  getSalesOrderBySupervisor,
+};

@@ -129,6 +129,11 @@ router.delete(
   authMiddleware.adminAndStaff,
   sales_orderController.deletes
 );
+router.get(
+  "/supervisor/sales-order",
+  authMiddleware.supervisorRole,
+  sales_orderController.getSalesOrderBySupervisor
+);
 
 // access token verify
 router.get(
