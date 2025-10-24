@@ -9,6 +9,7 @@ import { uploadProductImg } from "../middlewares/multerProduct.middleware.js";
 import productController from "../controllers/product.controller.js";
 import draft_penawaranController from "../controllers/draft_penawaran.controller.js";
 import sales_orderController from "../controllers/sales_order.controller.js";
+import dashboardController from "../controllers/dashboard.controller.js";
 
 const router = express.Router();
 // tahap
@@ -133,6 +134,25 @@ router.get(
   "/supervisor/sales-order",
   authMiddleware.supervisorRole,
   sales_orderController.getSalesOrderBySupervisor
+);
+
+// dashboard
+router.get(
+  "/supervisor/dashboard/aktifitas-staff",
+  authMiddleware.supervisorRole,
+  dashboardController.supervisorAktifitasStaff
+);
+
+router.get(
+  "/supervisor/dashboard/grafik",
+  authMiddleware.supervisorRole,
+  dashboardController.supervisorGrafik
+);
+
+router.get(
+  "/supervisor/dashboard/total-product-process",
+  authMiddleware.supervisorRole,
+  dashboardController.getProdukBaru
 );
 
 // access token verify
