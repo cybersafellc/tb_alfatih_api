@@ -12,25 +12,20 @@ export class GenerateDateForSupervisor {
   constructor() {
     this.today = new Date();
 
-    this.day1ago = new Date(this.today);
-    this.day1ago.setDate(this.today.getDate() - 1);
+    const makeDateAtMidnight = (daysAgo = 0) => {
+      const d = new Date(this.today);
+      d.setHours(0, 0, 0, 0);
+      d.setDate(this.today.getDate() - daysAgo);
+      return d;
+    };
 
-    this.day2ago = new Date(this.today);
-    this.day2ago.setDate(this.today.getDate() - 2);
-
-    this.day3ago = new Date(this.today);
-    this.day3ago.setDate(this.today.getDate() - 3);
-
-    this.day4ago = new Date(this.today);
-    this.day4ago.setDate(this.today.getDate() - 4);
-
-    this.day5ago = new Date(this.today);
-    this.day5ago.setDate(this.today.getDate() - 5);
-
-    this.day6ago = new Date(this.today);
-    this.day6ago.setDate(this.today.getDate() - 6);
-
-    this.day7ago = new Date(this.today);
-    this.day7ago.setDate(this.today.getDate() - 7);
+    this.day0 = makeDateAtMidnight(0);
+    this.day1ago = makeDateAtMidnight(1);
+    this.day2ago = makeDateAtMidnight(2);
+    this.day3ago = makeDateAtMidnight(3);
+    this.day4ago = makeDateAtMidnight(4);
+    this.day5ago = makeDateAtMidnight(5);
+    this.day6ago = makeDateAtMidnight(6);
+    this.day7ago = makeDateAtMidnight(7);
   }
 }
