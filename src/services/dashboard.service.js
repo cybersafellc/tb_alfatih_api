@@ -78,13 +78,13 @@ async function supervisorGrafik(request) {
     default:
       const date = new GenerateDateForSupervisor();
       const dateArray = [
-        date.day7ago,
         date.day6ago,
         date.day5ago,
         date.day4ago,
         date.day3ago,
         date.day2ago,
         date.day1ago,
+        date.day0,
       ];
       //
       response.filter.name = "Minggu ini";
@@ -99,7 +99,7 @@ async function supervisorGrafik(request) {
             },
           },
         });
-        dateNyo.setDate(dateNyo.getDate() + 1);
+
         response.interval.data.push({
           day: dateNyo.toLocaleDateString("id-ID", { weekday: "long" }),
           total: countData,
