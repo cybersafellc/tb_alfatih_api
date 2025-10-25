@@ -300,6 +300,11 @@ async function deletes(request) {
     where: result,
   });
   if (!count) throw new ResponseError(400, "sales order id tidak valid");
+  await database.details_sales_order.deleteMany({
+    where: {
+      sales_order_id: result.id,
+    },
+  });
   const responseDelete = await database.sales_order.delete({
     where: result,
   });
