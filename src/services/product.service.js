@@ -303,6 +303,7 @@ async function get(request) {
           tahap_id: result?.tahap_id || undefined,
         },
         kategori_id: result?.kategori_id || undefined,
+        diterima: result.active ? true : undefined,
         OR: [
           {
             name: {
@@ -337,6 +338,7 @@ async function get(request) {
           tahap_id: result?.tahap_id || undefined,
         },
         kategori_id: result?.kategori_id || undefined,
+        diterima: result.active ? true : undefined,
         OR: [
           {
             name: {
